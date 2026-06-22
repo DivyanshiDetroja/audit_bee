@@ -69,7 +69,22 @@ DOC_TYPE_TO_TEMPLATE = {
 
 # ── PDF rendering ──────────────────────────────────────────────────────────────
 
+SKIP_PDF = os.environ.get("SKIP_PDF", "0") == "1"
+
+# Minimal valid 1-page PDF used as a placeholder when SKIP_PDF=1
+_BLANK_PDF = (
+    b"%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n"
+    b"2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n"
+    b"3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Parent 2 0 R>>endobj\n"
+    b"xref\n0 4\n0000000000 65535 f\n0000000009 00000 n\n"
+    b"0000000058 00000 n\n0000000115 00000 n\n"
+    b"trailer<</Size 4/Root 1 0 R>>\nstartxref\n190\n%%EOF\n"
+)
+
+
 def render_pdf(template_name: str, fields: dict) -> bytes:
+    if SKIP_PDF:
+        return _BLANK_PDF
     tmpl = jinja_env.get_template(template_name)
     html_str = tmpl.render(**fields)
     return HTML(string=html_str).write_pdf()

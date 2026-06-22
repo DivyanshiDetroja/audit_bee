@@ -25,6 +25,8 @@ services:
         sync: false          # set to your Vercel URL, e.g. https://audit-bee.vercel.app
       - key: APP_ENV
         value: production
+      - key: SKIP_PDF
+        value: "1"
       - key: SEED_SECRET
         generateValue: true
 

@@ -43,7 +43,8 @@ def _run_seed_demo():
     _seed_status["state"] = "running"
     result = subprocess.run(
         ["python", "scripts/seed_demo.py"],
-        capture_output=True, text=True, cwd="/app"
+        capture_output=True, text=True, cwd="/app",
+        timeout=300,
     )
     if result.returncode == 0:
         _seed_status["state"] = "done"
