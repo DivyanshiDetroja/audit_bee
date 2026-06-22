@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     jwt_secret: str
     cors_origin: str = "http://localhost:5173"
     app_env: str = "development"
+    seed_secret: str = ""
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

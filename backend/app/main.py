@@ -1,4 +1,7 @@
-from fastapi import Depends, FastAPI
+import secrets
+import subprocess
+
+from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.orm import Session
@@ -30,3 +33,18 @@ app.include_router(integrations_router)
 def health(db: Session = Depends(get_db)):
     db.execute(text("SELECT 1"))
     return {"status": "ok", "db": "connected"}
+
+
+@app.post("/admin/seed")
+def seed(x_seed_secret: str = Header(...)):
+    if not settings.seed_secret or not secrets.compare_digest(x_seed_secret, settings.seed_secret):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    result = subprocess.run(
+        ["python", "scripts/seed_demo.py"],
+        capture_output=True, text=True, cwd="/app"
+    )
+    return {
+        "returncode": result.returncode,
+        "stdout": result.stdout[-4000:],
+        "stderr": result.stderr[-2000:],
+    }
