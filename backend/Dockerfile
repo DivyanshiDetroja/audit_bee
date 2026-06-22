@@ -16,7 +16,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-# Create the uploads directory (Phase 3 will mount/use it)
-RUN mkdir -p uploads
+RUN mkdir -p uploads && chmod +x start.sh
 
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["./start.sh"]

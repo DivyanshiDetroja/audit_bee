@@ -4,8 +4,6 @@ services:
     env: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
-    # Runs migrations then starts the server (no --reload in prod)
-    startCommand: bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"
     plan: free
     # Persistent disk requires a paid Render plan ($7+/mo). On the free plan,
     # /app/uploads is ephemeral — files reset on redeploy. Reseed before the demo.
