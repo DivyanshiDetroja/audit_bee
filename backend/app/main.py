@@ -1,7 +1,8 @@
 import secrets
 import subprocess
+import threading
 
-from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.orm import Session
@@ -35,18 +36,50 @@ def health(db: Session = Depends(get_db)):
     return {"status": "ok", "db": "connected"}
 
 
-@app.post("/admin/seed")
-def seed(x_seed_secret: str = Header(...)):
+_seed_status: dict = {"state": "idle", "detail": ""}
+
+
+def _run_seed_demo():
+    _seed_status["state"] = "running"
+    result = subprocess.run(
+        ["python", "scripts/seed_demo.py"],
+        capture_output=True, text=True, cwd="/app"
+    )
+    if result.returncode == 0:
+        _seed_status["state"] = "done"
+        _seed_status["detail"] = result.stdout[-500:]
+    else:
+        _seed_status["state"] = "error"
+        _seed_status["detail"] = result.stderr[-500:] or result.stdout[-500:]
+
+
+def _auth(x_seed_secret: str):
     if not settings.seed_secret or not secrets.compare_digest(x_seed_secret, settings.seed_secret):
         raise HTTPException(status_code=403, detail="Forbidden")
-    out = []
-    for script in ["scripts/seed.py", "scripts/seed_demo.py"]:
-        result = subprocess.run(
-            ["python", script],
-            capture_output=True, text=True, cwd="/app"
-        )
-        out.append({"script": script, "returncode": result.returncode,
-                    "stdout": result.stdout[-3000:], "stderr": result.stderr[-1000:]})
-        if result.returncode != 0:
-            break
-    return out
+
+
+@app.post("/admin/seed-base")
+def seed_base(x_seed_secret: str = Header(...)):
+    _auth(x_seed_secret)
+    result = subprocess.run(
+        ["python", "scripts/seed.py"],
+        capture_output=True, text=True, cwd="/app"
+    )
+    return {"returncode": result.returncode, "stdout": result.stdout[-2000:], "stderr": result.stderr[-500:]}
+
+
+@app.post("/admin/seed-demo")
+def seed_demo(x_seed_secret: str = Header(...)):
+    _auth(x_seed_secret)
+    if _seed_status["state"] == "running":
+        return {"state": "already_running"}
+    _seed_status["state"] = "idle"
+    t = threading.Thread(target=_run_seed_demo, daemon=True)
+    t.start()
+    return {"state": "started", "poll": "/admin/seed-status"}
+
+
+@app.get("/admin/seed-status")
+def seed_status(x_seed_secret: str = Header(...)):
+    _auth(x_seed_secret)
+    return _seed_status
