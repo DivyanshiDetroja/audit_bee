@@ -39,12 +39,14 @@ def health(db: Session = Depends(get_db)):
 def seed(x_seed_secret: str = Header(...)):
     if not settings.seed_secret or not secrets.compare_digest(x_seed_secret, settings.seed_secret):
         raise HTTPException(status_code=403, detail="Forbidden")
-    result = subprocess.run(
-        ["python", "scripts/seed_demo.py"],
-        capture_output=True, text=True, cwd="/app"
-    )
-    return {
-        "returncode": result.returncode,
-        "stdout": result.stdout[-4000:],
-        "stderr": result.stderr[-2000:],
-    }
+    out = []
+    for script in ["scripts/seed.py", "scripts/seed_demo.py"]:
+        result = subprocess.run(
+            ["python", script],
+            capture_output=True, text=True, cwd="/app"
+        )
+        out.append({"script": script, "returncode": result.returncode,
+                    "stdout": result.stdout[-3000:], "stderr": result.stderr[-1000:]})
+        if result.returncode != 0:
+            break
+    return out
