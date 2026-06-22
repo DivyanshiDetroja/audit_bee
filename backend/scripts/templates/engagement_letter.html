@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>
+  @page { size: 8.5in 11in; margin: 1in 1in 0.8in 1in; }
+  body { font-family: "Times New Roman", Times, serif; font-size: 11pt; color: #000; margin: 0; line-height: 1.55; }
+  .letterhead { text-align: center; margin-bottom: 24pt; border-bottom: 2pt solid #1a3a6e; padding-bottom: 10pt; }
+  .firm-name { font-size: 18pt; font-weight: bold; color: #1a3a6e; }
+  .firm-sub { font-size: 9pt; color: #555; margin-top: 2pt; }
+  .firm-contact { font-size: 9pt; color: #333; margin-top: 4pt; }
+  .date-line { margin-bottom: 16pt; }
+  .salutation { margin-bottom: 12pt; }
+  p { margin: 0 0 10pt 0; }
+  .section-head { font-weight: bold; text-decoration: underline; margin-top: 12pt; margin-bottom: 4pt; }
+  .signature-block { margin-top: 28pt; }
+  .sig-line { border-bottom: 1px solid #333; width: 50%; margin-bottom: 2pt; }
+  .footer { font-size: 8pt; color: #888; text-align: center; margin-top: 20pt; border-top: 1px solid #ccc; padding-top: 4pt; }
+</style>
+</head>
+<body>
+
+<div class="letterhead">
+  <div class="firm-name">{{ firm_name }}</div>
+  <div class="firm-sub">Certified Public Accountants &amp; Advisors</div>
+  <div class="firm-contact">{{ firm_address }} &nbsp;|&nbsp; {{ firm_phone }} &nbsp;|&nbsp; {{ firm_email }}</div>
+</div>
+
+<div class="date-line">{{ letter_date }}</div>
+
+<div>
+  {{ client_name }}<br/>
+  {{ client_address }}
+</div>
+
+<div class="salutation" style="margin-top:14pt;">
+  Dear {{ salutation_name }},
+</div>
+
+<p>
+  We are pleased to confirm our engagement to provide tax preparation and advisory services for the
+  tax year ending <strong>December 31, {{ tax_year }}</strong>. This letter sets out the terms of our engagement
+  and the nature of the services we will provide.
+</p>
+
+<p class="section-head">Scope of Services</p>
+<p>
+  We will prepare the following federal and state income tax returns on your behalf:
+</p>
+<ul>
+  {% for form in forms_to_prepare %}
+  <li>{{ form }}</li>
+  {% endfor %}
+</ul>
+<p>
+  Our services will be based on information and documents you provide to us. We will not audit or otherwise
+  verify the information you supply, although we may ask for clarification. We are not responsible for the
+  disallowance of tax deductions or credits if the underlying documentation is insufficient.
+</p>
+
+<p class="section-head">Your Responsibilities</p>
+<p>
+  You are responsible for providing complete and accurate information necessary for the preparation of your
+  returns, for retaining all records and supporting documentation, and for reviewing the completed returns
+  before signing.
+</p>
+
+<p class="section-head">Fees</p>
+<p>
+  Our fees for this engagement are estimated at <strong>${{ estimated_fee }}</strong> based on the complexity of
+  your return and time required. We will notify you if the scope changes materially. Payment is due upon
+  delivery of the completed returns.
+</p>
+
+<p class="section-head">Confidentiality</p>
+<p>
+  We will keep all information you provide strictly confidential and will not disclose it to any third party
+  without your consent, except as required by law or professional standards.
+</p>
+
+<p style="margin-top:14pt;">
+  Please sign and return a copy of this letter to confirm your acceptance of these terms. We look forward
+  to working with you.
+</p>
+
+<p>Sincerely,</p>
+
+<div class="signature-block">
+  <div class="sig-line"></div>
+  <div>{{ cpa_name }}, CPA</div>
+  <div>{{ firm_name }}</div>
+</div>
+
+<div style="margin-top:28pt;">
+  <p class="section-head">Client Acknowledgment</p>
+  <p>
+    The above terms are agreed to and accepted. I authorize {{ firm_name }} to prepare
+    the returns described herein for tax year {{ tax_year }}.
+  </p>
+  <div style="margin-top:16pt;">
+    <div class="sig-line"></div>
+    <div>{{ client_name }} &nbsp;&nbsp;&nbsp; Date: __________________</div>
+  </div>
+</div>
+
+<div class="footer">
+  {{ firm_name }} &nbsp;|&nbsp; {{ firm_address }} &nbsp;|&nbsp; {{ firm_phone }}
+</div>
+
+</body>
+</html>

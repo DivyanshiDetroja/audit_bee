@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>
+  @page { size: 8.5in 11in; margin: 0.5in; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 8.5pt; color: #000; margin: 0; }
+  .form-title { text-align: center; margin-bottom: 8pt; border-bottom: 2px solid #000; padding-bottom: 4pt; }
+  .form-title h2 { font-size: 15pt; margin: 0; }
+  .form-title .sub { font-size: 9pt; margin: 2pt 0; }
+  .form-title .omb { font-size: 7pt; color: #555; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 4pt; }
+  td { border: 1px solid #666; padding: 4pt 5pt; vertical-align: top; }
+  .label { font-size: 6.5pt; color: #444; display: block; margin-bottom: 2pt; }
+  .value { font-size: 10pt; font-weight: bold; }
+  .box-label { font-size: 7pt; font-weight: bold; }
+  .wide { width: 55%; }
+  .copy-badge { display: inline-block; border: 1px solid #000; padding: 2pt 6pt; font-size: 7.5pt; font-weight: bold; margin-bottom: 6pt; }
+  .footer { font-size: 6.5pt; color: #555; margin-top: 6pt; text-align: center; border-top: 1px solid #aaa; padding-top: 3pt; }
+  .property-box { border: 1px solid #999; padding: 4pt; margin-top: 4pt; background: #f9f9f9; }
+</style>
+</head>
+<body>
+
+<div class="form-title">
+  <span class="copy-badge">Copy B — For Payer/Borrower</span>
+  <h2>Form 1098</h2>
+  <div class="sub">Mortgage Interest Statement</div>
+  <div class="sub">Tax Year {{ tax_year }}</div>
+  <div class="omb">OMB No. 1545-0901</div>
+</div>
+
+<table>
+  <tr>
+    <td class="wide">
+      <span class="label">RECIPIENT'S/LENDER'S name, address, and telephone number</span>
+      <span class="value">{{ lender_name }}</span><br/>
+      <span>{{ lender_address }}</span><br/>
+      <span>{{ lender_phone }}</span>
+    </td>
+    <td>
+      <span class="label">RECIPIENT'S/LENDER'S federal identification no.</span>
+      <span class="value">{{ lender_tin }}</span>
+    </td>
+    <td>
+      <span class="label">PAYER'S/BORROWER'S SSN</span>
+      <span class="value">{{ borrower_ssn }}</span>
+    </td>
+  </tr>
+  <tr>
+    <td class="wide">
+      <span class="label">PAYER'S/BORROWER'S name</span>
+      <span class="value">{{ borrower_name }}</span>
+    </td>
+    <td colspan="2">
+      <span class="label">Account number</span>
+      <span class="value">{{ account_number }}</span>
+    </td>
+  </tr>
+  <tr>
+    <td class="wide">
+      <span class="label">PAYER'S/BORROWER'S address</span>
+      <span class="value">{{ borrower_address }}</span>
+    </td>
+    <td colspan="2">
+      <span class="label">City, state, ZIP</span>
+      <span class="value">{{ borrower_city_state }}</span>
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td>
+      <span class="box-label">1</span>
+      <span class="label">Mortgage interest received from payer(s)/borrower(s)</span>
+      <span class="value">${{ mortgage_interest }}</span>
+    </td>
+    <td>
+      <span class="box-label">2</span>
+      <span class="label">Outstanding mortgage principal</span>
+      <span class="value">${{ outstanding_principal }}</span>
+    </td>
+    <td>
+      <span class="box-label">3</span>
+      <span class="label">Mortgage origination date</span>
+      <span class="value">{{ origination_date }}</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <span class="box-label">4</span>
+      <span class="label">Refund of overpaid interest</span>
+      <span class="value">—</span>
+    </td>
+    <td>
+      <span class="box-label">5</span>
+      <span class="label">Mortgage insurance premiums</span>
+      <span class="value">${{ mortgage_insurance }}</span>
+    </td>
+    <td>
+      <span class="box-label">6</span>
+      <span class="label">Points paid on purchase of principal residence</span>
+      <span class="value">—</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <span class="box-label">7</span>
+      <span class="label">If address of property securing mortgage is the same as PAYER'S/BORROWER'S address, the box is checked, or the address or description is entered in box 8</span>
+      <span class="value">☑</span>
+    </td>
+    <td>
+      <span class="box-label">9</span>
+      <span class="label">Number of properties securing the mortgage</span>
+      <span class="value">1</span>
+    </td>
+    <td>
+      <span class="box-label">11</span>
+      <span class="label">Mortgage acquisition date</span>
+      <span class="value">{{ origination_date }}</span>
+    </td>
+  </tr>
+</table>
+
+<div class="property-box">
+  <span class="label">Property securing this mortgage:</span>
+  <span class="value">{{ property_address }}</span>
+</div>
+
+<div class="footer">
+  Form 1098 (Rev. December 2024) &nbsp;|&nbsp; Department of the Treasury — Internal Revenue Service
+</div>
+
+</body>
+</html>

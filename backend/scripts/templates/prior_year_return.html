@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>
+  @page { size: 8.5in 11in; margin: 0.5in; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 9pt; color: #000; margin: 0; }
+  .form-title { text-align: center; margin-bottom: 10pt; }
+  .form-title h2 { font-size: 16pt; margin: 0; }
+  .form-title .sub { font-size: 10pt; margin: 3pt 0; }
+  .form-title .year-badge { display: inline-block; background: #1a3a6e; color: white; padding: 3pt 14pt; font-size: 13pt; font-weight: bold; margin: 4pt 0; }
+  .section-header { background: #1a3a6e; color: white; font-weight: bold; padding: 3pt 6pt; font-size: 9pt; margin-top: 8pt; margin-bottom: 0; }
+  table { width: 100%; border-collapse: collapse; }
+  td { border: 1px solid #ccc; padding: 3pt 5pt; }
+  .label { font-size: 8pt; color: #555; }
+  .value { font-weight: bold; font-size: 10pt; }
+  .right { text-align: right; }
+  .total-row td { background: #f0f0f0; font-weight: bold; }
+  .divider { border-top: 2px solid #1a3a6e; margin: 6pt 0; }
+  .footer { font-size: 7pt; color: #777; margin-top: 10pt; text-align: center; }
+  .irs-logo { font-size: 12pt; font-weight: bold; color: #1a3a6e; }
+  .ssn-line { font-size: 8pt; margin: 4pt 0; }
+</style>
+</head>
+<body>
+
+<div class="form-title">
+  <div class="irs-logo">Internal Revenue Service</div>
+  <h2>U.S. Individual Income Tax Return</h2>
+  <div class="year-badge">{{ tax_year }} — Summary Copy</div>
+  <div class="sub">Form 1040 — Prepared and Filed</div>
+</div>
+
+<div class="ssn-line">
+  <strong>Name:</strong> {{ taxpayer_name }}
+  &nbsp;&nbsp;&nbsp;
+  <strong>SSN:</strong> {{ ssn }}
+  &nbsp;&nbsp;&nbsp;
+  <strong>Filing Status:</strong> {{ filing_status }}
+</div>
+<div class="ssn-line">
+  <strong>Address:</strong> {{ address }}
+</div>
+
+<div class="section-header">INCOME</div>
+<table>
+  <tr>
+    <td class="label" style="width:70%">1a — Total wages, salaries, tips</td>
+    <td class="value right">${{ wages }}</td>
+  </tr>
+  <tr>
+    <td class="label">2b — Taxable interest</td>
+    <td class="value right">${{ taxable_interest }}</td>
+  </tr>
+  <tr>
+    <td class="label">3b — Ordinary dividends</td>
+    <td class="value right">${{ dividends }}</td>
+  </tr>
+  <tr>
+    <td class="label">7 — Capital gain or (loss)</td>
+    <td class="value right">${{ capital_gains }}</td>
+  </tr>
+  <tr class="total-row">
+    <td class="label">11 — Adjusted Gross Income (AGI)</td>
+    <td class="value right">${{ agi }}</td>
+  </tr>
+</table>
+
+<div class="section-header">DEDUCTIONS &amp; TAX</div>
+<table>
+  <tr>
+    <td class="label" style="width:70%">12 — Standard / Itemized deduction</td>
+    <td class="value right">${{ deduction }}</td>
+  </tr>
+  <tr>
+    <td class="label">15 — Taxable income</td>
+    <td class="value right">${{ taxable_income }}</td>
+  </tr>
+  <tr>
+    <td class="label">16 — Tax (from Tax Table / Rate Schedule)</td>
+    <td class="value right">${{ tax }}</td>
+  </tr>
+  <tr>
+    <td class="label">25a — Federal income tax withheld (W-2)</td>
+    <td class="value right">${{ withheld }}</td>
+  </tr>
+  <tr class="total-row">
+    <td class="label">35a — Amount refunded to you  / 37 — Amount you owe</td>
+    <td class="value right">{{ refund_or_owe }}</td>
+  </tr>
+</table>
+
+<div class="divider"></div>
+<p style="font-size:8pt; color:#555;">
+  Under penalties of perjury, I declare that I have examined this return and accompanying schedules and statements,
+  and to the best of my knowledge and belief, they are true, correct, and complete.
+</p>
+<table style="margin-top:6pt;">
+  <tr>
+    <td style="width:50%; border:none;">
+      <span class="label">Your signature</span><br/>
+      <span style="font-style:italic; color:#888;">/s/ {{ taxpayer_name }}</span>
+    </td>
+    <td style="width:25%; border:none;">
+      <span class="label">Date</span><br/>
+      <span>{{ filed_date }}</span>
+    </td>
+    <td style="width:25%; border:none;">
+      <span class="label">Occupation</span><br/>
+      <span>{{ occupation }}</span>
+    </td>
+  </tr>
+</table>
+
+<div class="footer">
+  Form 1040 Summary (Tax Year {{ tax_year }}) — Prepared by {{ preparer_name }} | EIN {{ preparer_ein }}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>
+  @page { size: 8.5in 11in; margin: 0.5in; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 8.5pt; color: #000; margin: 0; }
+  .form-title { text-align: center; margin-bottom: 8pt; border-bottom: 2px solid #000; padding-bottom: 4pt; }
+  .form-title h2 { font-size: 15pt; margin: 0; }
+  .form-title .sub { font-size: 9pt; margin: 2pt 0; }
+  .form-title .omb { font-size: 7pt; color: #555; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 4pt; }
+  td { border: 1px solid #666; padding: 4pt 5pt; vertical-align: top; }
+  .label { font-size: 6.5pt; color: #444; display: block; margin-bottom: 2pt; }
+  .value { font-size: 10pt; font-weight: bold; }
+  .box-label { font-size: 6.5pt; font-weight: bold; color: #000; }
+  .wide { width: 55%; }
+  .amount-cell { text-align: right; }
+  .copy-badge { display: inline-block; border: 1px solid #000; padding: 2pt 6pt; font-size: 7.5pt; font-weight: bold; margin-bottom: 6pt; }
+  .footer { font-size: 6.5pt; color: #555; margin-top: 6pt; text-align: center; border-top: 1px solid #aaa; padding-top: 3pt; }
+</style>
+</head>
+<body>
+
+<div class="form-title">
+  <span class="copy-badge">Copy B — For Recipient</span>
+  <h2>Form 1099-NEC</h2>
+  <div class="sub">Nonemployee Compensation</div>
+  <div class="sub">Tax Year {{ tax_year }}</div>
+  <div class="omb">OMB No. 1545-0116</div>
+</div>
+
+<table>
+  <tr>
+    <td class="wide">
+      <span class="label">PAYER'S name, street address, city, state, and ZIP code</span>
+      <span class="value">{{ payer_name }}</span><br/>
+      <span>{{ payer_address }}</span>
+    </td>
+    <td>
+      <span class="label">PAYER'S TIN</span>
+      <span class="value">{{ payer_tin }}</span>
+    </td>
+    <td>
+      <span class="label">RECIPIENT'S TIN</span>
+      <span class="value">{{ recipient_tin }}</span>
+    </td>
+  </tr>
+  <tr>
+    <td class="wide">
+      <span class="label">RECIPIENT'S name</span>
+      <span class="value">{{ recipient_name }}</span>
+    </td>
+    <td>
+      <span class="label">Account number</span>
+      <span class="value">{{ account_number }}</span>
+    </td>
+    <td>
+      <span class="label">2nd TIN not.</span>
+      <span class="value"></span>
+    </td>
+  </tr>
+  <tr>
+    <td class="wide">
+      <span class="label">Street address (including apt. no.)</span>
+      <span class="value">{{ recipient_address }}</span>
+    </td>
+    <td colspan="2">
+      <span class="label">City or town, state or province, country, and ZIP or foreign postal code</span>
+      <span class="value">{{ recipient_city_state }}</span>
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td style="width:50%">
+      <span class="box-label">1</span>
+      <span class="label">Nonemployee compensation</span>
+      <span class="value">${{ nonemployee_compensation }}</span>
+    </td>
+    <td style="width:25%">
+      <span class="box-label">2</span>
+      <span class="label">Payer made direct sales totaling $5,000 or more of consumer products to recipient for resale</span>
+      <span class="value">☐</span>
+    </td>
+    <td style="width:25%">
+      <span class="box-label">4</span>
+      <span class="label">Federal income tax withheld</span>
+      <span class="value">${{ federal_tax_withheld }}</span>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <span class="box-label">5</span>
+      <span class="label">State tax withheld</span>
+      <span class="value">${{ state_tax }}</span>
+    </td>
+    <td>
+      <span class="box-label">6</span>
+      <span class="label">State/Payer's state no.</span>
+      <span class="value">{{ state }}  {{ state_id }}</span>
+    </td>
+    <td>
+      <span class="box-label">7</span>
+      <span class="label">State income</span>
+      <span class="value">${{ state_income }}</span>
+    </td>
+  </tr>
+</table>
+
+<div class="footer">
+  Form 1099-NEC (Rev. January 2024) &nbsp;|&nbsp; Department of the Treasury — Internal Revenue Service
+</div>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  CSS variables for shadcn/ui components.
+  Values map directly to the design tokens in DESIGN.md Section 9.1.
+  Expressed as HSL channels (no hsl() wrapper) so Tailwind can compose
+  opacity modifiers: bg-primary/50 etc.
+*/
+@layer base {
+  :root {
+    /* Surfaces */
+    --background: 0 0% 100%;           /* #FFFFFF */
+    --foreground: 222 13% 10%;         /* #16181D */
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 13% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 13% 10%;
+
+    /* Brand — deep slate-indigo */
+    --primary: 220 37% 19%;            /* #1F2A44 */
+    --primary-foreground: 0 0% 100%;
+
+    /* Subtle surface */
+    --secondary: 220 14% 97%;          /* #F7F8FA */
+    --secondary-foreground: 220 37% 19%;
+
+    --muted: 220 14% 97%;
+    --muted-foreground: 218 10% 39%;   /* #5B6270 */
+
+    /* Action accent */
+    --accent: 224 91% 60%;             /* #3B6CF6 */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 347 77% 50%;        /* rose — needs-review */
+    --destructive-foreground: 0 0% 100%;
+
+    /* Hairline border */
+    --border: 220 15% 91%;             /* #E6E8EC */
+    --input: 220 15% 91%;
+    --ring: 224 91% 60%;               /* #3B6CF6 */
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Respect reduced-motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Document processing shimmer animation */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}

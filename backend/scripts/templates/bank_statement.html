@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>
+  @page { size: 8.5in 11in; margin: 0.5in; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 9pt; color: #000; margin: 0; }
+  .bank-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12pt; border-bottom: 3px solid #003087; padding-bottom: 6pt; }
+  .bank-name { font-size: 20pt; font-weight: bold; color: #003087; }
+  .bank-name .tag { font-size: 8pt; color: #666; display: block; font-weight: normal; }
+  .statement-info { text-align: right; font-size: 8.5pt; }
+  .statement-info .period { font-size: 11pt; font-weight: bold; }
+  .acct-box { border: 1px solid #ccc; padding: 5pt 8pt; margin-bottom: 10pt; background: #f7f9fc; }
+  .acct-box table { width: 100%; border-collapse: collapse; }
+  .acct-box td { border: none; padding: 2pt 4pt; font-size: 8.5pt; }
+  .acct-box .lbl { color: #555; font-size: 7.5pt; }
+  .acct-box .val { font-weight: bold; }
+  .summary-bar { display: flex; gap: 12pt; margin-bottom: 10pt; }
+  .summary-card { flex: 1; border: 1px solid #ddd; padding: 5pt 8pt; border-radius: 2pt; }
+  .summary-card .sc-label { font-size: 7pt; color: #666; }
+  .summary-card .sc-value { font-size: 12pt; font-weight: bold; color: #003087; }
+  .section-title { background: #003087; color: white; padding: 3pt 6pt; font-size: 8.5pt; font-weight: bold; margin-bottom: 0; margin-top: 8pt; }
+  table.txn { width: 100%; border-collapse: collapse; }
+  table.txn th { background: #e8eef8; font-size: 7.5pt; text-align: left; padding: 2pt 4pt; border: 1px solid #ccc; }
+  table.txn td { font-size: 8.5pt; padding: 2.5pt 4pt; border: 1px solid #eee; vertical-align: top; }
+  table.txn tr:nth-child(even) td { background: #fafbfc; }
+  .credit { color: #1a6e2e; }
+  .debit { color: #7a1a1a; }
+  .right { text-align: right; }
+  .footer { font-size: 7pt; color: #888; margin-top: 14pt; text-align: center; border-top: 1px solid #ccc; padding-top: 4pt; }
+</style>
+</head>
+<body>
+
+<div class="bank-header">
+  <div>
+    <div class="bank-name">
+      {{ bank_name }}
+      <span class="tag">Member FDIC &nbsp;|&nbsp; Equal Housing Lender</span>
+    </div>
+    <div style="font-size:8pt; color:#555; margin-top:4pt;">
+      {{ bank_address }}
+    </div>
+  </div>
+  <div class="statement-info">
+    <div class="period">{{ statement_month }}</div>
+    <div>Statement Period: {{ period_start }} – {{ period_end }}</div>
+  </div>
+</div>
+
+<div class="acct-box">
+  <table>
+    <tr>
+      <td><span class="lbl">Account Holder</span><br/><span class="val">{{ account_holder }}</span></td>
+      <td><span class="lbl">Address</span><br/><span class="val">{{ holder_address }}</span></td>
+      <td><span class="lbl">Account Number</span><br/><span class="val">••••{{ last_four }}</span></td>
+      <td><span class="lbl">Account Type</span><br/><span class="val">{{ account_type }}</span></td>
+      <td><span class="lbl">Routing Number</span><br/><span class="val">{{ routing_number }}</span></td>
+    </tr>
+  </table>
+</div>
+
+<div class="summary-bar">
+  <div class="summary-card">
+    <div class="sc-label">Beginning Balance</div>
+    <div class="sc-value">${{ beginning_balance }}</div>
+  </div>
+  <div class="summary-card">
+    <div class="sc-label">Total Deposits / Credits</div>
+    <div class="sc-value credit">${{ total_credits }}</div>
+  </div>
+  <div class="summary-card">
+    <div class="sc-label">Total Withdrawals / Debits</div>
+    <div class="sc-value debit">${{ total_debits }}</div>
+  </div>
+  <div class="summary-card">
+    <div class="sc-label">Ending Balance</div>
+    <div class="sc-value">${{ ending_balance }}</div>
+  </div>
+</div>
+
+<div class="section-title">TRANSACTION DETAIL</div>
+<table class="txn">
+  <thead>
+    <tr>
+      <th style="width:12%">Date</th>
+      <th style="width:46%">Description</th>
+      <th style="width:12%" class="right">Withdrawals</th>
+      <th style="width:12%" class="right">Deposits</th>
+      <th style="width:12%" class="right">Balance</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for txn in transactions %}
+    <tr>
+      <td>{{ txn.date }}</td>
+      <td>{{ txn.description }}</td>
+      <td class="right debit">{{ txn.withdrawal or "" }}</td>
+      <td class="right credit">{{ txn.deposit or "" }}</td>
+      <td class="right">{{ txn.balance }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="footer">
+  Questions? Call {{ bank_phone }} or visit {{ bank_website }}<br/>
+  This statement covers the period {{ period_start }} through {{ period_end }}.
+  Please review promptly and report any discrepancies within 60 days.
+</div>
+
+</body>
+</html>
